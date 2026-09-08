@@ -1,0 +1,29 @@
+# [Ll]ibrary/   (uncomment if clone too fat??)
+Library/
+Temp/
+Logs/
+obj/
+Build/
+Builds/
+*.log
+.DS_Store
+.vs/
+.vscode/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.pidb
+*.pdb
+*.mdb
+*.apk
+*.unitypackage
+*.app
+sysinfo.txt
+InitTestScene*.unity*
+MemoryCaptures/
+Recordings/
+
+# layouts whatever
+UserSettings/*
+!UserSettings/EditorUserSettings.asset
