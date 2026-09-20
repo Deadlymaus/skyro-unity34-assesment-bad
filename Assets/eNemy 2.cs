@@ -37,8 +37,7 @@ public class eNemy2 : MonoBehaviour
             Destroy(other.gameObject);
             if (hp <= 0)
             {
-                var g = FindObjectOfType<gm>();
-                if (g != null) g.addScore(1);
+                // DEV2-05 — skóre zámerne odpojené (rovnako ako eNemy)
                 Destroy(gameObject);
             }
         }

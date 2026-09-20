@@ -53,7 +53,10 @@ public class gm : MonoBehaviour
         if (hpTxt != null) hpTxt.text = "hp " + HP;
         else if (hud != null) hud.upd("hp " + HP);
 
-        if (scoreTxt != null) scoreTxt.text = "score:" + score;
+        // DIAGNOSTIKA DEV2-05 — ScoreText sa tu zámerne neaktualizuje.
+        // Po opravenej kolízii + addScore uvidíš zmenu len ak napojíš UI
+        // (addScore už Text nastavuje — alebo doplň sem).
+        // hint: scoreTxt
         if (hud != null) hud.upd("hp " + HP);
 
         if (gameOver)

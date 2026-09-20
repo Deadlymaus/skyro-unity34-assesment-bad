@@ -37,8 +37,11 @@ public class eNemy : MonoBehaviour
             Destroy(other.gameObject);
             if (hp <= 0)
             {
-                var g = FindObjectOfType<gm>();
-                if (g != null) g.addScore(1);
+                // ============================================================
+                // DIAGNOSTIKA DEV2-05 — SKÓRE NENAPOJENÉ (zámerne)
+                // Po opravenej kolízii (DEV2-03) enemy zomrie, ale score
+                // nerastie, kým nezavoláš gm.addScore / napojíš ScoreText.
+                // ============================================================
                 Destroy(gameObject);
             }
         }
