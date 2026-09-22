@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HudStuff : MonoBehaviour
+public class HUDController : MonoBehaviour
 {
     public Text txt;
     public Text txt2;
