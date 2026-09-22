@@ -1,98 +1,53 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
+using System.Collections;
 
 public class PlayerController: MonoBehaviour
 {
-    public float speed = 5.5f;
-    public int hp = 37;
-    public GameObject prefab;
-    public float fireWait = 0.18f;
-    float lastShot;
-    float lastDir = 1f;
-    public HUD hud;
+    [SerializeField] float speed = 5.5f;
+    [SerializeField] float shootingSpeed = 0.18f;
 
-    void Start()
-    {
-        DontDestroyOnLoad(this);
-        hp = 37;
-    }
+    public GameObject bulletPrefab;
+    public int hp = 37;
+
+    float lastShot;
 
     void Update()
     {
-        // ============================================================
-        // DIAGNOSTIKA DEV2-02 — POHYB CHÝBA (zámerne)
-        // Doplň: Horizontal / Vertical (Input Manager OK na tento task)
-        // alebo Input System. Posuň transform. Pozri README.
-        // ============================================================
-        /*
+        GameOver();
+        transform.position += new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0f) * speed * Time.deltaTime;
 
-        */
-
-        // streľba ostáva — overíš, že Play beží, aj keď sa ešte nehýbeš
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && Time.time > lastShot + shootingSpeed)
         {
-            if (Time.time > lastShot + fireWait)
-            {
-                lastShot = Time.time;
-                shoot();
-            }
+            lastShot = Time.time;
+            StartCoroutine(shoot());
         }
 
-        // also write hud from here because gm is laggy sometimes??
-        var hpGo = GameObject.Find("HPText");
-        if (hpGo != null)
-        {
-            hpGo.GetComponent<Text>().text = "hp " + hp;
-        }
-        hud = FindObjectOfType<HUD>();
-        if (hud != null)
-        {
-            hud.upd("hp " + hp);
-        }
+        var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
+    }
 
-        var g = FindObjectOfType<GameManager>();
-        if (g != null)
+    IEnumerator shoot()
+    {
+        var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        bullet.name = "bullet";
+
+        Destroy(bullet, 2);
+        while (bullet != null)
         {
-            g.HP = hp;
+            bullet.transform.position += transform.rotation * Vector2.up * 2 * Time.fixedDeltaTime;
+            yield return null;
         }
     }
 
-    void shoot()
+    void GameOver()
     {
-        try
+        if(hp <= 0)
         {
-            var b = Instantiate(prefab, transform.position, Quaternion.identity);
-            b.transform.parent = null;
-        }
-        catch
-        {
-            GameObject b = new GameObject("bullet");
-            b.transform.position = transform.position;
-            b.transform.parent = null;
-            var sr = b.AddComponent<SpriteRenderer>();
-            var my = GetComponent<SpriteRenderer>();
-            if (my != null) sr.sprite = my.sprite;
-            sr.color = new Color(1f, 1f, 0.2f, 1f);
-            sr.sortingOrder = 10;
-            var rb = b.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0f;
-            rb.linearVelocity = new Vector2(lastDir * 12f, 0f);
-            var col = b.AddComponent<CircleCollider2D>();
-            col.isTrigger = true;
-            col.radius = 0.12f;
-            Destroy(b, 1.6f);
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D c)
-    {
-        if (c.gameObject.GetComponent<Enemy>() != null)
-        {
-            hp = hp - 4;
-            var g = GameObject.FindObjectOfType<GameManager>();
-            if (g != null) g.hitPlayer(0);
-            var hpGo = GameObject.Find("HPText");
-            if (hpGo != null) hpGo.GetComponent<Text>().text = "hp " + hp;
+            GameManager.instance.gameOver = true;
+            Time.timeScale = 0f;
+            EditorApplication.ExitPlaymode();
         }
     }
 }

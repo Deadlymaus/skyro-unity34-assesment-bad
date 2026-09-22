@@ -1,36 +1,30 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class HUD : MonoBehaviour
 {
-    public Text txt;
-    public Text txt2;
-    public string last;
+    public static HUD instance;
+    public TMP_Text scoreText;
+    public TMP_Text hpText;
 
-    public void upd(string s)
+
+    private void Awake()
     {
-        last = s;
-        if (txt != null)
-        {
-            txt.text = s;
-        }
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
+    public void UpdateScore(string score)
+    {
+        if (scoreText == null) { print("There is no scoreText"); return;}
+
+        scoreText.text = score;
     }
 
-    public void setScore(int n)
+    public void UpdateHP(string hp)
     {
-        if (txt2 != null)
-        {
-            txt2.text = "" + n;
-        }
-    }
+        if (hpText == null) { print("There is no hpText"); return;}
 
-    void Update()
-    {
-        // TODO hook this to gm
-        if (txt == null)
-        {
-            var go = GameObject.Find("HPText");
-            if (go != null) txt = go.GetComponent<Text>();
-        }
+        hpText.text = hp;
+
     }
 }

@@ -127,13 +127,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1689151780274341851, guid: cbe7ef482f5df4ede9583e0d0700a14a, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1922327454384054408, guid: cbe7ef482f5df4ede9583e0d0700a14a, type: 3}
       propertyPath: m_Name
-      value: Enemy
+      value: BigEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 3737644305027494239, guid: cbe7ef482f5df4ede9583e0d0700a14a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -175,10 +171,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7434110760416559782, guid: cbe7ef482f5df4ede9583e0d0700a14a, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -216,9 +208,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61fc0aa7bf3324578bfad2f731183b8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HudStuff
-  txt: {fileID: 0}
-  txt2: {fileID: 0}
-  last: 
+  scoreText: {fileID: 1441495176}
+  hpText: {fileID: 1514197680}
 --- !u!114 &492487438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,6 +591,16 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 685063384}
   m_CullTransparentMesh: 1
+--- !u!1 &869974759 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2347572884924024978, guid: 66cdf7c99b124914a8b103572bb43d52, type: 3}
+  m_PrefabInstance: {fileID: 4388783228005373881}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1273075451 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1922327454384054408, guid: cbe7ef482f5df4ede9583e0d0700a14a, type: 3}
+  m_PrefabInstance: {fileID: 465455732}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1441495174
 GameObject:
   m_ObjectHideFlags: 0
@@ -657,7 +658,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Score:'
+  m_text: 'Score: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -862,7 +863,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'HP:'
+  m_text: 'hp: 100'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -975,10 +976,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::player
   speed: 5.5
+  shootingSpeed: 0.18
+  bulletPrefab: {fileID: 1024216151432414643, guid: 16164de1d624c1141aea2fda2a0a1ed7, type: 3}
   hp: 37
-  prefab: {fileID: 0}
-  fireWait: 0.18
-  hud: {fileID: 0}
 --- !u!58 &1675413615
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1013,8 +1013,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.45
+  m_Offset: {x: -0.0026587844, y: 0}
+  m_Radius: 0.2931369
 --- !u!50 &1675413616
 Rigidbody2D:
   serializedVersion: 5
@@ -1145,17 +1145,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2469cb9b11084cd396ca062c6571caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gm
-  enemyPrefab: {fileID: 1922327454384054408, guid: cbe7ef482f5df4ede9583e0d0700a14a, type: 3}
-  prefab2: {fileID: 0}
-  spawnEvery: 1.337
-  score: 0
-  HP: 37
+  enemyPrefabs:
+  - {fileID: 869974759}
+  - {fileID: 1273075451}
+  spawnEvery: 3
   paused: 0
-  hpTxt: {fileID: 0}
-  scoreTxt: {fileID: 0}
-  hud: {fileID: 0}
-  t: 0
-  wave: 1
+  score: 0
   gameOver: 0
 --- !u!4 &1960761867
 Transform:

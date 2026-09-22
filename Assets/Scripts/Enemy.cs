@@ -4,18 +4,18 @@ public class Enemy : MonoBehaviour
 {
     public float speed = 2.4f;
     public int hp = 3;
-    float hitCd;
+    float hitCooldown;
 
+    private PlayerController player;
+    private void Awake()
+    {
+        player = FindAnyObjectByType<PlayerController>();
+    }
     void Update()
     {
-        var p = GameObject.Find("player");
-        if (p == null)
+        if (player != null)
         {
-            p = FindObjectOfType<PlayerController>() != null ? FindObjectOfType<PlayerController>().gameObject : null;
-        }
-        if (p != null)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, p.transform.position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
         }
     }
 
@@ -23,25 +23,23 @@ public class Enemy : MonoBehaviour
     {
         if (other == null) return;
 
-        if (other.gameObject.name == "player" || other.GetComponent<PlayerController>() != null)
+        if (other.GetComponent<PlayerController>() != null)
         {
-            if (Time.time < hitCd) return;
-            hitCd = Time.time + 0.4f;
-            var g = FindObjectOfType<GameManager>();
-            if (g != null) g.hitPlayer(7);
+            if (Time.time < hitCooldown) return;
+            hitCooldown = Time.time + 0.4f;
+
+            player.hp -= 3;
+
+            GameManager.instance.AddScore(3);
+            HUD.instance.UpdateHP("hp: " + player.hp);
         }
 
-        if (other.gameObject.name == "bullet" || other.gameObject.name.Contains("bullet"))
+        if (other.gameObject.name.Contains("bullet"))
         {
-            hp = hp - 1;
+            hp -= 1;
             Destroy(other.gameObject);
             if (hp <= 0)
             {
-                // ============================================================
-                // DIAGNOSTIKA DEV2-05 — SKÓRE NENAPOJENÉ (zámerne)
-                // Po opravenej kolízii (DEV2-03) enemy zomrie, ale score
-                // nerastie, kým nezavoláš gm.addScore / napojíš ScoreText.
-                // ============================================================
                 Destroy(gameObject);
             }
         }
@@ -51,10 +49,13 @@ public class Enemy : MonoBehaviour
     {
         if (other != null && other.GetComponent<PlayerController>() != null)
         {
-            if (Time.time < hitCd) return;
-            hitCd = Time.time + 0.55f;
-            var g = FindObjectOfType<GameManager>();
-            if (g != null) g.hitPlayer(3);
+            if (Time.time < hitCooldown) return;
+            hitCooldown = Time.time + 0.55f;
+
+            player.hp -= 5;
+
+            GameManager.instance.AddScore(5);
+            HUD.instance.UpdateHP("hp: " + player.hp);
         }
     }
 }
